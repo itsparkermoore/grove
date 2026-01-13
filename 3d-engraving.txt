@@ -1,0 +1,1 @@
+It occurred to me that with current-gen AI, you can generate any image as a depth map, like a LiDAR scan. This enables a subsequent Python script to use that luminosity depth map as a basis for modeling the tool path of different sized tool tips of a 3-axis CNC router, creating a realistic, production ready 3d file.

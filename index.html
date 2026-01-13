@@ -1,0 +1,391 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Parker Moore - Grove Application Site</title>
+    <style>
+      :root {
+        color-scheme: dark;
+        --bg: #000;
+        --fg: #fff;
+        --muted: rgba(255, 255, 255, 0.7);
+        --border: rgba(255, 255, 255, 0.25);
+        --border-strong: rgba(255, 255, 255, 0.7);
+        --card-bg: #050505;
+        --shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--fg);
+        font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica,
+          Arial, "Apple Color Emoji", "Segoe UI Emoji";
+        line-height: 1.45;
+      }
+
+      header {
+        position: sticky;
+        top: 0;
+        z-index: 10;
+        background: rgba(0, 0, 0, 0.9);
+        backdrop-filter: blur(10px);
+        border-bottom: 1px solid var(--border);
+      }
+
+      .wrap {
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 18px 16px;
+      }
+
+      .top {
+        display: flex;
+        gap: 12px;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+      }
+
+      h1 {
+        margin: 0;
+        font-size: 18px;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        font-weight: 700;
+      }
+
+      .controls {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        flex-wrap: wrap;
+      }
+
+      button {
+        appearance: none;
+        background: transparent;
+        border: 1px solid var(--border-strong);
+        color: var(--fg);
+        border-radius: 0;
+        padding: 10px 12px;
+        font-weight: 600;
+        letter-spacing: 0.02em;
+        cursor: pointer;
+      }
+
+      button:hover {
+        border-color: var(--fg);
+      }
+
+      button:active {
+        transform: translateY(1px);
+      }
+
+      .hint {
+        color: var(--muted);
+        font-size: 12px;
+        max-width: 720px;
+      }
+
+      main .wrap {
+        padding-top: 22px;
+        padding-bottom: 40px;
+      }
+
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 14px;
+      }
+
+      .card {
+        background: var(--card-bg);
+        border: 1px solid var(--border);
+        border-radius: 0;
+        box-shadow: var(--shadow);
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        min-height: 120px;
+      }
+
+      .card-head {
+        padding: 14px 14px 10px;
+        border-bottom: 1px solid var(--border);
+      }
+
+      .card-title {
+        font-weight: 700;
+        font-size: 14px;
+        letter-spacing: 0.02em;
+        word-break: break-word;
+      }
+
+      .badge {
+        display: inline-block;
+        margin-left: 10px;
+        padding: 2px 8px;
+        border: 1px solid rgba(255, 255, 255, 0.35);
+        color: #ff7a00;
+        font-size: 11px;
+        font-weight: 800;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        vertical-align: middle;
+      }
+
+      .card-media {
+        width: 100%;
+        display: block;
+        border-bottom: 1px solid var(--border);
+        background: #000;
+        cursor: zoom-in;
+      }
+
+      .card-body {
+        padding: 12px 14px 14px;
+        white-space: normal;
+        font-size: 14px;
+      }
+
+      .modal[hidden] {
+        display: none;
+      }
+
+      .modal {
+        position: fixed;
+        inset: 0;
+        z-index: 100;
+        background: rgba(0, 0, 0, 0.92);
+        display: grid;
+        grid-template-rows: auto 1fr;
+      }
+
+      .modal-bar {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        padding: 10px 12px;
+        border-bottom: 1px solid var(--border);
+        background: rgba(0, 0, 0, 0.7);
+        backdrop-filter: blur(10px);
+      }
+
+      .modal-close {
+        appearance: none;
+        background: transparent;
+        border: 1px solid var(--border-strong);
+        color: var(--fg);
+        border-radius: 0;
+        padding: 10px 12px;
+        font-weight: 700;
+        cursor: pointer;
+      }
+
+      .modal-close:hover {
+        border-color: var(--fg);
+      }
+
+      .modal-stage {
+        display: grid;
+        place-items: center;
+        padding: 18px 14px;
+      }
+
+      .modal-img {
+        max-width: min(1100px, 96vw);
+        max-height: calc(100vh - 76px);
+        width: auto;
+        height: auto;
+        border: 1px solid var(--border);
+        background: #000;
+      }
+
+      body.modal-open {
+        overflow: hidden;
+      }
+
+      .empty {
+        border: 1px dashed var(--border);
+        padding: 18px 16px;
+        color: var(--muted);
+        font-size: 13px;
+      }
+
+      .kbd {
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
+          "Courier New", monospace;
+        font-size: 12px;
+        border: 1px solid var(--border);
+        padding: 1px 6px;
+        border-radius: 0;
+        color: var(--fg);
+      }
+
+      a {
+        color: var(--fg);
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="wrap">
+        <div class="top">
+          <h1>Parker Moore - Grove Application Site</h1>
+          <div class="controls"></div>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <div class="wrap">
+        <div class="grid">
+          <section class="card">
+            <div class="card-head">
+              <div class="card-title">green-coffee-buying</div>
+            </div>
+            <div class="card-body">
+              Green (unroasted) coffee buying should be modeled as a search problem, but it isn’t.
+              It’s treated as a relationship-based procurement exercise with brand and origin
+              reputation serving as proxies for future quality. In reality, year-to-year variation
+              in cup score is driven by a non-stationary, multi-factor system with weak persistence.
+              The quality-generating function is underdetermined and non-stationary, with far more
+              latent variables than observable constraints, which produces stochastic and occasionally
+              chaotic year-to-year outcomes. A corrected strategy runs on an explore-then-exploit
+              loop. In the exploration phase, conduct a normalized random sampling across the global
+              production space - normalizing for farm and mill count to avoid over-representing high
+              density origins. In the exploitation phase, allocate sample roasting and cupping
+              bandwidth to the high-signal clusters that emerge from this first pass. The net effect
+              is that buyers cup less but discover more: instead of chasing historical reputation,
+              they chase emergent quality. This reduces the required cupping hours, reduces the
+              premium paid for expected quality, and increases the likelihood of finding undervalued
+              coffees. The result is higher cup scores at lower cost.
+            </div>
+          </section>
+
+          <section class="card">
+            <div class="card-head">
+              <div class="card-title">surfex <span class="badge">Active Startup Endeavor</span></div>
+            </div>
+            <img class="card-media" src="surfex.jpeg" alt="surfex" loading="lazy" />
+            <div class="card-body">
+              Most brand websites talk endlessly about themselves, but almost none answer questions.
+              Yet, answering is what visitors actually want. When people evaluate a product, they
+              don’t want slogans or brand mythologies; they want clarity, resolution, and reasons to
+              trust. The modern web is visually rich but cognitively limited: visitors can look and
+              click, but they cannot ask. Asking is how humans resolve uncertainty, test fit, and
+              move toward a purchase. SurfEX produces this missing modality by letting visitors query
+              the product the way they would query a salesperson, and then dynamically surfacing the
+              most relevant content - founder videos, demos, FAQs, explainer text, and social proof.
+              The emerging interface of digital experience is not static pages that users must
+              explore inefficiently; it’s a hybrid of search and conversation. SurfEX embraces that
+              shift as a full-page experience, not as a timid chat bubble in the corner. You don’t
+              tiptoe into new interfaces - you leap. Radical changes in user behavior require radical
+              changes in interface. The result is higher trust density per unit time, which is the
+              scarce resource in digital sales - and more revenue from the traffic you already have.
+            </div>
+          </section>
+
+          <section class="card">
+            <div class="card-head">
+              <div class="card-title">simulate</div>
+            </div>
+            <div class="card-body">
+              Training generalized, adaptable intelligence may require full world simulation -
+              allowing “evolution” to occur digitally. To this end, you don’t need to simulate this
+              reality - you just need to simulate a reality.
+            </div>
+          </section>
+
+          <section class="card">
+            <div class="card-head">
+              <div class="card-title">3d-engraving</div>
+            </div>
+            <img class="card-media" src="depth-map.PNG" alt="depth-map" loading="lazy" />
+            <img class="card-media" src="3d-engraving.png" alt="3d-engraving" loading="lazy" />
+            <div class="card-body">
+              It occurred to me that with current-gen AI, you can generate any image as a depth map,
+              like a LiDAR scan. This enables a subsequent Python script to use that luminosity depth
+              map as a basis for modeling the tool path of different sized tool tips of a 3-axis CNC
+              router, creating a realistic, production ready 3d file.
+            </div>
+          </section>
+
+          <section class="card">
+            <div class="card-head">
+              <div class="card-title">spurious-correlation</div>
+            </div>
+            <div class="card-body">
+              True relationship with AI characters will require the invention of a technology which
+              generates, updates, and otherwise maintains or engineers fully coherent, world-aligned
+              backstories and memory access modeling.
+            </div>
+          </section>
+
+          <section class="card">
+            <div class="card-head">
+              <div class="card-title">3d-ramp</div>
+            </div>
+            <img class="card-media" src="3d-ramp.PNG" alt="3d-ramp" loading="lazy" />
+            <div class="card-body">
+              One weekend, I designed and built a web application that faithfully reproduces a 3d
+              model of commercially available wheelchair ramp that I sell in my day job. It creates
+              this from a set of numerical dimensions, allowing any design to be generated on the
+              fly, procedurally, from raw geometry down to the smallest detail.
+            </div>
+          </section>
+        </div>
+      </div>
+    </main>
+
+    <div id="modal" class="modal" hidden role="dialog" aria-modal="true" aria-label="Image viewer">
+      <div class="modal-bar">
+        <button id="modalClose" class="modal-close" type="button">Close</button>
+      </div>
+      <div class="modal-stage" id="modalStage">
+        <img id="modalImg" class="modal-img" alt="" />
+      </div>
+    </div>
+
+    <script>
+      const modal = document.getElementById("modal");
+      const modalImg = document.getElementById("modalImg");
+      const modalClose = document.getElementById("modalClose");
+      const modalStage = document.getElementById("modalStage");
+
+      function openModal(src, alt) {
+        modalImg.src = src;
+        modalImg.alt = alt || "";
+        modal.hidden = false;
+        document.body.classList.add("modal-open");
+        modalClose.focus();
+      }
+
+      function closeModal() {
+        modal.hidden = true;
+        modalImg.src = "";
+        document.body.classList.remove("modal-open");
+      }
+
+      for (const img of document.querySelectorAll("img.card-media")) {
+        img.addEventListener("click", () => openModal(img.currentSrc || img.src, img.alt));
+      }
+
+      modalClose.addEventListener("click", closeModal);
+
+      modalStage.addEventListener("click", (e) => {
+        if (e.target === modalStage) closeModal();
+      });
+
+      document.addEventListener("keydown", (e) => {
+        if (!modal.hidden && e.key === "Escape") closeModal();
+      });
+    </script>
+  </body>
+</html>

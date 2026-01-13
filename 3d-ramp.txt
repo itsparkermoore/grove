@@ -1,0 +1,1 @@
+One weekend, I designed and built a web application that faithfully reproduces a 3d model of commercially available wheelchair ramp that I sell in my day job. It creates this from a set of numerical dimensions, allowing any design to be generated on the fly, procedurally, from raw geometry down to the smallest detail.
