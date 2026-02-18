@@ -148,6 +148,15 @@
         cursor: zoom-in;
       }
 
+      .card-media-video {
+        width: 100%;
+        display: block;
+        aspect-ratio: 16 / 9;
+        border: 0;
+        border-bottom: 1px solid var(--border);
+        background: #000;
+      }
+
       .card-body {
         padding: 12px 14px 14px;
         white-space: normal;
@@ -332,7 +341,15 @@
             <div class="card-head">
               <div class="card-title">3d-ramp</div>
             </div>
-            <img class="card-media" src="3d-ramp.PNG" alt="3d-ramp" loading="lazy" />
+            <iframe
+              class="card-media-video"
+              src="https://www.youtube.com/embed/EvL74g8gN-o?si=HxmOUYYUtwj7m9__"
+              title="YouTube video player"
+              frameborder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              referrerpolicy="strict-origin-when-cross-origin"
+              allowfullscreen
+            ></iframe>
             <div class="card-body">
               One weekend, I designed and built a web application that faithfully reproduces a 3d
               model of commercially available wheelchair ramp that I sell in my day job. It creates
